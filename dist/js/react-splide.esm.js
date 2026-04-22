@@ -2602,7 +2602,8 @@ var EVENTS = [
   [EVENT_AUTOPLAY_PLAY, "onAutoplayPlay"],
   [EVENT_AUTOPLAY_PLAYING, "onAutoplayPlaying"],
   [EVENT_AUTOPLAY_PAUSE, "onAutoplayPause"],
-  [EVENT_LAZYLOAD_LOADED, "onLazyLoadLoaded"]
+  [EVENT_LAZYLOAD_LOADED, "onLazyLoadLoaded"],
+  [EVENT_OVERFLOW, "onOverflow"]
 ];
 
 // src/js/utils/classNames/classNames.ts
@@ -2669,12 +2670,7 @@ function merge2(object, source) {
 // src/js/components/SplideTrack/SplideTrack.tsx
 import React from "react";
 var SplideTrack = ({ children: children2, className, ...props }) => {
-  return /* @__PURE__ */ React.createElement("div", {
-    className: classNames("splide__track", className),
-    ...props
-  }, /* @__PURE__ */ React.createElement("ul", {
-    className: "splide__list"
-  }, children2));
+  return /* @__PURE__ */ React.createElement("div", { className: classNames("splide__track", className), ...props }, /* @__PURE__ */ React.createElement("ul", { className: "splide__list" }, children2));
 };
 
 // src/js/components/Splide/Splide.tsx
@@ -2754,21 +2750,22 @@ var Splide2 = class extends React2.Component {
   }
   render() {
     const { className, tag: Root = "div", hasTrack = true, children: children2, ...props } = this.props;
-    return /* @__PURE__ */ React2.createElement(Root, {
-      className: classNames("splide", className),
-      ref: this.splideRef,
-      ...this.omit(props, ["options", ...EVENTS.map((event) => event[1])])
-    }, hasTrack ? /* @__PURE__ */ React2.createElement(SplideTrack, null, children2) : children2);
+    return /* @__PURE__ */ React2.createElement(
+      Root,
+      {
+        className: classNames("splide", className),
+        ref: this.splideRef,
+        ...this.omit(props, ["options", ...EVENTS.map((event) => event[1])])
+      },
+      hasTrack ? /* @__PURE__ */ React2.createElement(SplideTrack, null, children2) : children2
+    );
   }
 };
 
 // src/js/components/SplideSlide/SplideSlide.tsx
 import React3 from "react";
 var SplideSlide = ({ children: children2, className, ...props }) => {
-  return /* @__PURE__ */ React3.createElement("li", {
-    className: classNames("splide__slide", className),
-    ...props
-  }, children2);
+  return /* @__PURE__ */ React3.createElement("li", { className: classNames("splide__slide", className), ...props }, children2);
 };
 export {
   Splide2 as Splide,
@@ -2777,7 +2774,7 @@ export {
 };
 /*!
  * Splide.js
- * Version  : 4.1.3
+ * Version  : 4.1.4
  * License  : MIT
  * Copyright: 2022 Naotoshi Fujita
  */

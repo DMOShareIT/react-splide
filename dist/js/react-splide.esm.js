@@ -1,21 +1,28 @@
 // node_modules/@splidejs/splide/dist/js/splide.esm.js
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor)
-      descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+function _defineProperties(e, r) {
+  for (var t = 0; t < r.length; t++) {
+    var o = r[t];
+    o.enumerable = o.enumerable || false, o.configurable = true, "value" in o && (o.writable = true), Object.defineProperty(e, _toPropertyKey(o.key), o);
   }
 }
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps)
-    _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps)
-    _defineProperties(Constructor, staticProps);
-  Object.defineProperty(Constructor, "prototype", { writable: false });
-  return Constructor;
+function _createClass(e, r, t) {
+  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: false }), e;
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == typeof i ? i : i + "";
+}
+function _toPrimitive(t, r) {
+  if ("object" != typeof t || !t)
+    return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != typeof i)
+      return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
 }
 var MEDIA_PREFERS_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 var CREATED = 1;
@@ -64,7 +71,10 @@ function isNull(subject) {
 }
 function isHTMLElement(subject) {
   try {
-    return subject instanceof (subject.ownerDocument.defaultView || window).HTMLElement;
+    if (subject instanceof subject.ownerDocument.defaultView.HTMLElement)
+      return true;
+    else if (subject instanceof window.top.HTMLElement)
+      return true;
   } catch (e) {
     return false;
   }
@@ -748,7 +758,7 @@ function Slide$1(Splide22, index, slideIndex, slide) {
   function mount() {
     if (!isClone) {
       slide.id = root.id + "-slide" + pad(index + 1);
-      setAttribute(slide, ROLE, pagination ? "tabpanel" : "group");
+      setAttribute(slide, ROLE, pagination ? "presentation" : "group");
       setAttribute(slide, ARIA_ROLEDESCRIPTION, i18n.slide);
       setAttribute(slide, ARIA_LABEL, label || format(i18n.slideLabel, [index + 1, Splide22.length]));
     }
@@ -1192,7 +1202,7 @@ function Move(Splide22, Components2, options) {
   function translate(position, preventLoop) {
     if (!Splide22.is(FADE)) {
       var destination = preventLoop ? position : loop(position);
-      style(list, "transform", "translate" + resolve("X") + "(" + destination + "px)");
+      style(list, "transform", "translate" + resolve("X") + "(" + Math.round(destination) + "px)");
       position !== destination && emit(EVENT_SHIFTED);
     }
   }
@@ -1791,7 +1801,7 @@ function Drag(Splide22, Components2, options) {
       state.set(DRAGGING);
       emit(EVENT_DRAG);
     }
-    if (e.cancelable) {
+    if (e.cancelable && !disabled) {
       if (dragging) {
         Move2.translate(basePosition + constrain(diffCoord(e)));
         var expired = diffTime(e) > LOG_INTERVAL;
@@ -1813,7 +1823,7 @@ function Drag(Splide22, Components2, options) {
       state.set(IDLE);
       emit(EVENT_DRAGGED);
     }
-    if (dragging) {
+    if (dragging && !disabled) {
       move(e);
       prevent(e);
     }
@@ -1916,7 +1926,7 @@ function normalizeKey(key) {
 }
 var KEYBOARD_EVENT = "keydown";
 function Keyboard(Splide22, Components2, options) {
-  var _EventInterface10 = EventInterface(Splide22), on = _EventInterface10.on, bind = _EventInterface10.bind, unbind = _EventInterface10.unbind;
+  var _EventInterface0 = EventInterface(Splide22), on = _EventInterface0.on, bind = _EventInterface0.bind, unbind = _EventInterface0.unbind;
   var root = Splide22.root;
   var resolve = Components2.Direction.resolve;
   var target;
@@ -1967,7 +1977,7 @@ var SRC_DATA_ATTRIBUTE = DATA_ATTRIBUTE + "-lazy";
 var SRCSET_DATA_ATTRIBUTE = SRC_DATA_ATTRIBUTE + "-srcset";
 var IMAGE_SELECTOR = "[" + SRC_DATA_ATTRIBUTE + "], [" + SRCSET_DATA_ATTRIBUTE + "]";
 function LazyLoad(Splide22, Components2, options) {
-  var _EventInterface11 = EventInterface(Splide22), on = _EventInterface11.on, off = _EventInterface11.off, bind = _EventInterface11.bind, emit = _EventInterface11.emit;
+  var _EventInterface1 = EventInterface(Splide22), on = _EventInterface1.on, off = _EventInterface1.off, bind = _EventInterface1.bind, emit = _EventInterface1.emit;
   var isSequential = options.lazyLoad === "sequential";
   var events = [EVENT_MOVED, EVENT_SCROLLED];
   var entries = [];
@@ -2229,7 +2239,7 @@ function Sync(Splide22, Components2, options) {
   };
 }
 function Wheel(Splide22, Components2, options) {
-  var _EventInterface12 = EventInterface(Splide22), bind = _EventInterface12.bind;
+  var _EventInterface10 = EventInterface(Splide22), bind = _EventInterface10.bind;
   var lastTime = 0;
   function mount() {
     if (options.wheel) {
@@ -2259,7 +2269,7 @@ function Wheel(Splide22, Components2, options) {
 }
 var SR_REMOVAL_DELAY = 90;
 function Live(Splide22, Components2, options) {
-  var _EventInterface13 = EventInterface(Splide22), on = _EventInterface13.on;
+  var _EventInterface11 = EventInterface(Splide22), on = _EventInterface11.on;
   var track = Components2.Elements.track;
   var enabled = options.live && !options.isNavigation;
   var sr = create("span", CLASS_SR);
@@ -2433,8 +2443,8 @@ function Slide(Splide22, Components2, options) {
     cancel
   };
 }
-var _Splide = /* @__PURE__ */ function() {
-  function _Splide2(target, options) {
+var _Splide2 = /* @__PURE__ */ function() {
+  function _Splide(target, options) {
     this.event = EventInterface();
     this.Components = {};
     this.state = State(CREATED);
@@ -2455,7 +2465,7 @@ var _Splide = /* @__PURE__ */ function() {
     }
     this._o = Object.create(merge({}, options));
   }
-  var _proto = _Splide2.prototype;
+  var _proto = _Splide.prototype;
   _proto.mount = function mount(Extensions, Transition) {
     var _this = this;
     var state = this.state, Components2 = this.Components;
@@ -2545,7 +2555,7 @@ var _Splide = /* @__PURE__ */ function() {
     }
     return this;
   };
-  _createClass(_Splide2, [{
+  return _createClass(_Splide, [{
     key: "options",
     get: function get() {
       return this._o;
@@ -2564,9 +2574,8 @@ var _Splide = /* @__PURE__ */ function() {
       return this._C.Controller.getIndex();
     }
   }]);
-  return _Splide2;
 }();
-var Splide = _Splide;
+var Splide = _Splide2;
 Splide.defaults = {};
 Splide.STATES = STATES;
 
@@ -2774,7 +2783,7 @@ export {
 };
 /*!
  * Splide.js
- * Version  : 4.1.4
+ * Version  : 4.1.5
  * License  : MIT
- * Copyright: 2022 Naotoshi Fujita
+ * Copyright: 2026 Naotoshi Fujita
  */

@@ -130,7 +130,7 @@ export class Splide extends React.Component<SplideProps> {
 
       if ( typeof handler === 'function' ) {
         splide.on( event, ( ...args: any[] ) => {
-          handler( splide, ...args );
+          ( handler as ( splide: SplideCore, ...args: any[] ) => void )( splide, ...args );
         } );
       }
     } );
